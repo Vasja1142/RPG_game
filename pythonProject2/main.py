@@ -222,6 +222,25 @@ class Game:
 
         pygame.quit()
 
+    def get_random_equipment(self):
+        """Выбирает случайный предмет, устанавливает уровень и добавляет случайные навыки."""
+        equipment = random.choice(self.equipment_list)
+        equipment.level = max(1, self.player.level // 2)
+        equipment.generate_random_skills(self.random_skill_list)
+        return equipment
+
+    # Список случайных навыков
+    random_skill_list = [
+        {"name": "Вампиризм", "base_strength": 1, "multiplier": 0.1,
+         "description": "Восстанавливает % от нанесенного урона"},
+        {"name": "Ярость", "base_strength": 2, "multiplier": 0.2,
+         "description": "Увеличивает урон на 5 секунд после получения урона"},
+        {"name": "Регенерация", "base_strength": 3, "multiplier": 0.5,
+         "description": "Восстанавливает здоровье в секунду"},
+        {"name": "Удача", "base_strength": 2, "multiplier": 0.3,
+         "description": "Увеличивает шанс выпадения лучшей добычи из врагов"},
+    ]
+
 
 if __name__ == "__main__":
     game = Game()
