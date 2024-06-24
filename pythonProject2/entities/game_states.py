@@ -159,24 +159,36 @@ class PlayState(GameState):
 
         health_label = self.game.font.render("Здоровье:", True, (255, 255, 255))
         self.game.screen.blit(health_label, (10, 10))
-        self.game.draw_health_bar(self.game.player.health, 100, 10, width=150, height=15)
-
+        # Шкала здоровья и опыта игрока
+        self.game.draw_health_bar(
+            self.game.player.health,
+            100,
+            10,
+            width=150,
+            height=15,
+            experience=self.game.player.experience,  # Добавляем опыт
+            max_experience=self.game.player.level * 100  # Максимальный опыт для текущего уровня
+        )
         for enemy in self.game.enemy_group:
             enemy_health_x = enemy.rect.centerx - 10
             self.game.draw_health_bar(enemy.health, enemy_health_x, enemy.rect.y - 15, width=30, height=5,
                                       show_text=False, max_health=enemy.max_health)
 
-        level_text = self.game.font.render(f"Уровень: {self.game.level}", True, (255, 255, 255))
-        self.game.screen.blit(level_text, (10, 30))
-
-        player_level_text = self.game.font.render(f"Уровень  игрока: {self.game.player.level}", True,
-                                                  (255, 255, 255))
-        self.game.screen.blit(player_level_text, (10, 50))
-        exp_text = self.game.font.render(f"Опыт: {self.game.player.experience}", True, (255, 255, 255))
-        self.game.screen.blit(exp_text, (10, 70))
+        # Уровень игрока
+        player_level_text = self.game.font.render(f"Уровень: {self.game.player.level}", True,
+                                                  (255, 255, 255))  # Меняем надпись
+        self.game.screen.blit(player_level_text, (10, 30))
 
         gold_text = self.game.font.render(f"Золото: {self.game.player.gold}", True, (255, 255, 255))  # Новая строка
-        self.game.screen.blit(gold_text, (10, 90))  # Новая строка
+        self.game.screen.blit(gold_text, (10, 50))  # Новая строка
+
+        # Подземелье
+        dungeon_font = pygame.font.Font(None, 30)  # Создаем шрифт большего размера (например, 40)
+        dungeon_text = dungeon_font.render(f"Подземелье: {self.game.level}", True, (255, 255, 255))
+        text_rect = dungeon_text.get_rect(center=(self.game.screen_width // 2, 30))
+        self.game.screen.blit(dungeon_text, text_rect)
+
+
 
         self.game.chest_group.draw(self.game.screen)
 

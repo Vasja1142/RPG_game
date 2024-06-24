@@ -100,8 +100,9 @@ class Game:
         self.notification_duration = 2000 # Время отображения уведомления
         self.last_action_time = pygame.time.get_ticks()
 
-    def draw_health_bar(self, health, x, y, width=50, height=10, show_text=True, max_health=100):
-        """Рисует полоску здоровья."""
+    def draw_health_bar(self, health, x, y, width=50, height=10, show_text=True, max_health=100, experience=0,
+                        max_experience=100):
+        """Рисует полоску здоровья и опыта."""
         health_ratio = health / max_health
         green_width = int(width * health_ratio)
 
@@ -112,6 +113,18 @@ class Game:
             health_text = self.font.render(f"{health}", True, (0, 0, 0))
             text_rect = health_text.get_rect(center=(x + width // 2, y + height // 2))
             self.screen.blit(health_text, text_rect)
+
+        exp_ratio = experience / max_experience if max_experience > 0 else 0  # Избегаем деления на ноль
+        blue_width = int(width * exp_ratio)
+
+        pygame.draw.rect(self.screen, (0, 0, 255), (x, y + height + 5, blue_width, height))
+        pygame.draw.rect(self.screen, (100, 100, 100), (x + blue_width, y + height + 5, width - blue_width, height))
+
+        if show_text:
+            exp_text = self.font.render(f"{experience}/{max_experience}", True, (0, 0, 0))
+            text_rect = exp_text.get_rect(
+                center=(x + width // 2, y + height + 5 + height // 2))  # Центрируем текст по шкале опыта
+            self.screen.blit(exp_text, text_rect)
 
     def next_level(self):
         self.level += 1
