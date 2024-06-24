@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c3551797-2394-4909-83b3-969b578cd466" name="Changes" comment="save">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pythonProject2/entities/equipment.py" beforeDir="false" afterPath="$PROJECT_DIR$/pythonProject2/entities/equipment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pythonProject2/entities/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/pythonProject2/entities/player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pythonProject2/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/pythonProject2/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pythonProject2/ui/chestOpenUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/pythonProject2/ui/chestOpenUI.py" afterDir="false" />
-    </list>
+    <list default="true" id="c3551797-2394-4909-83b3-969b578cd466" name="Changes" comment="save" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
