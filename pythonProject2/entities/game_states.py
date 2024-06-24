@@ -60,7 +60,6 @@ class GameState(GameState):
         game.player = Player((50, 50))
         game.player_group = pygame.sprite.GroupSingle(game.player)
         game.player.equipment = [] # Инициализация списка экипировки игрока
-        # ... (другой код)
 
     def handle_events(self, event):
         if self.game.show_game_over and self.game.ok_button.is_clicked(event):
@@ -73,6 +72,10 @@ class GameState(GameState):
                 if slot_rect.collidepoint(mouse_pos):
                     self.game.player.remove_equipment(i)  # Снять экипировку
                     break
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                self.game.player.attack(self.game.projectile_group)
 
     def update(self):
         self.game.player_group.update(self.game.projectile_group, self.game.enemy_group)
@@ -107,7 +110,45 @@ class GameState(GameState):
             # ... (здесь можно добавить улучшения характеристик игрока)
 
     def draw(self):
-        self.game.draw()
+        self.game.screen.blit(self.game.bg_image, (0, 0))  #  <---  Рисуем  фон  в  начале
+        self.game.player_group.draw(self.game.screen)
+        self.game.enemy_group.draw(self.game.screen)
+        self.game.projectile_group.draw(self.game.screen)
+        self.game.enemy_projectile_group.draw(self.game.screen)
+
+        # Индикаторы здоровья
+        health_label = self.game.font.render("Здоровье:", True, (255, 255, 255))
+        self.game.screen.blit(health_label, (10, 10))
+        self.game.draw_health_bar(self.game.player.health, 100, 10, width=150, height=15)
+
+        for enemy in self.game.enemy_group:
+            enemy_health_x = enemy.rect.centerx - 10
+            self.game.draw_health_bar(enemy.health, enemy_health_x, enemy.rect.y - 15, width=30, height=5, show_text=False,
+                                 max_health=enemy.max_health)
+
+        # Отображение уровня
+        level_text = self.game.font.render(f"Уровень: {self.game.level}", True, (255, 255, 255))
+        self.game.screen.blit(level_text, (10, 30))
+
+        # Отображение уровня и опыта игрока
+        player_level_text = self.game.font.render(f"Уровень игрока: {self.game.player.level}", True, (255, 255, 255))
+        self.game.screen.blit(player_level_text, (10, 50))
+        exp_text = self.game.font.render(f"Опыт: {self.game.player.experience}", True, (255, 255, 255))
+        self.game.screen.blit(exp_text, (10, 70))
+
+        self.game.chest_group.draw(self.game.screen) # <--- Добавляем отрисовку сундуков
+
+        # Отображение слотов экипировки:
+        for i, slot_pos in enumerate(self.game.equipment_slots):
+            pygame.draw.rect(self.game.screen, (100, 100, 100), (slot_pos[0], slot_pos[1], 50, 50))  # Серый фон слота
+
+            # Отрисовка картинки экипировки
+            if i < len(self.game.player.equipment):
+                equipment_type = self.game.player.equipment[i].equipment_type
+                if equipment_type in self.game.equipment_images:
+                    image = self.game.equipment_images[equipment_type]
+                    image = pygame.transform.scale(image, (50, 50))  # <--- Масштабируем изображение
+                    self.game.screen.blit(image, (slot_pos[0], slot_pos[1]))  # <--- Рисуем  в  координатах  слота
 
         if self.game.show_game_over:
             game_over_font = pygame.font.Font(None, 50)

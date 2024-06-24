@@ -1,3 +1,4 @@
+# entities/equipment.py
 import pygame
 
 class Equipment:
@@ -11,11 +12,12 @@ class Equipment:
         if self.equipment_type == "weapon":
             player.damage += self.bonus
         elif self.equipment_type == "helmet":
-            player.health += self.bonus
+            player.health = min(player.health + self.bonus, player.max_health) # Исправлено
         elif self.equipment_type == "shoes":
             player.speed += self.bonus
         elif self.equipment_type == "amulet":
             player.max_health += self.bonus
+            player.health = min(player.health + self.bonus, player.max_health)  # Применяем бонус к текущему здоровью
         elif self.equipment_type == "ring":
             player.damage += self.bonus
         elif self.equipment_type == "cloak":

@@ -15,7 +15,7 @@ class Chest(pygame.sprite.Sprite):
         """Открывает сундук и применяет бонус к игроку."""
         if not self.opened:
             self.opened = True
-            self.equipment.apply_bonus(player)
+            player.add_equipment(self.equipment)   # <--- Добавляем экипировку к игроку
             self.kill()
 
             # Отображение уведомления
@@ -25,6 +25,7 @@ class Chest(pygame.sprite.Sprite):
                 center=(self.game.screen_width // 2, self.game.screen_height // 2 - 50)
             )
             self.game.show_notification = True
+            self.game.notification_start_time = pygame.time.get_ticks() # Запускаем таймер для уведомления
 
     def update(self):
         """Обрабатывает нажатие на сундук."""

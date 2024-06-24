@@ -87,6 +87,9 @@ class Game:
         self.state = MenuState(self)
 
         self.show_notification = False
+        self.notification_text = None
+        self.notification_rect = None
+        self.notification_duration = 2000 # Время отображения уведомления
 
     def draw_health_bar(self, health, x, y, width=50, height=10, show_text=True, max_health=100):
         """Рисует полоску здоровья."""
@@ -154,47 +157,7 @@ class Game:
 
         self.show_game_over = True
 
-    def draw(self):
-        """Отрисовывает все элементы игры."""
-        self.screen.blit(self.bg_image, (0, 0))
-        self.player_group.draw(self.screen)
-        self.enemy_group.draw(self.screen)
-        self.projectile_group.draw(self.screen)
-        self.enemy_projectile_group.draw(self.screen)
 
-        # Индикаторы здоровья
-        health_label = self.font.render("Здоровье:", True, (255, 255, 255))
-        self.screen.blit(health_label, (10, 10))
-        self.draw_health_bar(self.player.health, 100, 10, width=150, height=15)
-
-        for enemy in self.enemy_group:
-            enemy_health_x = enemy.rect.centerx - 10
-            self.draw_health_bar(enemy.health, enemy_health_x, enemy.rect.y - 15, width=30, height=5, show_text=False,
-                                 max_health=enemy.max_health)
-
-        # Отображение уровня
-        level_text = self.font.render(f"Уровень: {self.level}", True, (255, 255, 255))
-        self.screen.blit(level_text, (10, 30))
-
-        # Отображение уровня и опыта игрока
-        player_level_text = self.font.render(f"Уровень игрока: {self.player.level}", True, (255, 255, 255))
-        self.screen.blit(player_level_text, (10, 50))
-        exp_text = self.font.render(f"Опыт: {self.player.experience}", True, (255, 255, 255))
-        self.screen.blit(exp_text, (10, 70))
-
-        # Отображение слотов экипировки
-        for i, slot_pos in enumerate(self.equipment_slots):
-            pygame.draw.rect(self.screen, (100, 100, 100), (slot_pos[0], slot_pos[1], 50, 50))  # Серый фон слота
-
-            # Отрисовка картинки экипировки
-            if i < len(self.player.equipment):
-                equipment_type = self.player.equipment[i].equipment_type
-                if equipment_type in self.equipment_images:
-                    self.screen.blit(self.equipment_images[equipment_type], (slot_pos[0], slot_pos[1]))
-
-        # Отображение уведомлений
-        if self.show_notification:
-            self.screen.blit(self.notification_text, self.notification_rect)
 
     def run(self):
         """Запуск игрового цикла"""
@@ -207,10 +170,24 @@ class Game:
                 self.state.handle_events(event)
 
             self.state.update()
-            self.state.draw()
+
+            self.screen.blit(self.bg_image, (0, 0))   # <--  Очистка фона
+            self.player_group.draw(self.screen)
+            self.enemy_group.draw(self.screen)
+            self.projectile_group.draw(self.screen)
+            self.enemy_projectile_group.draw(self.screen)
 
             self.chest_group.update()
-            self.chest_group.draw(self.screen)
+            self.chest_group.draw(self.screen)      # <--  Рисуем сундуки
+
+            self.state.draw()           # <-- Затем отрисовываем
+
+            # Отображаем уведомление, если оно есть
+            if self.show_notification:
+                if pygame.time.get_ticks() - self.notification_start_time >= self.notification_duration:
+                    self.show_notification = False  # Скрываем уведомление
+                else:
+                    self.screen.blit(self.notification_text, self.notification_rect)
 
             pygame.display.flip()
             self.clock.tick(60)

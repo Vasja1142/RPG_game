@@ -5,7 +5,8 @@ from entities.projectile import Projectile
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
-        self.health = 100
+        self.max_health = 100  # ДОБАВЛЕНО
+        self.health = self.max_health
         self.vision_range = 800  # Добавляем дальность видимости игрока
 
         player_image = pygame.image.load(
@@ -32,7 +33,7 @@ class Player(pygame.sprite.Sprite):
             if existing_equipment.equipment_type == equipment.equipment_type:
                 return  # Не добавляем, если уже есть экипировка такого типа
 
-        self.equipment.append(equipment)
+        self.equipment.append(equipment)  # <--- Добавляем экипировку в инвентарь игрока
 
         # Применяем бонус к характеристикам
         equipment.apply_bonus(self)
