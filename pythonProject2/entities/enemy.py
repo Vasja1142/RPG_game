@@ -21,10 +21,9 @@ class Enemy(pygame.sprite.Sprite):
         """Атакует игрока снарядом."""
         now = pygame.time.get_ticks()
         if now - self.last_attack_time >= self.attack_cooldown:
-            # Направление всегда влево (-1, 0)
             direction = pygame.math.Vector2(-1, 0)
-
-            projectile = Projectile(self.rect.center, direction)
+            projectile = Projectile(self.rect.center, direction, color=(0, 255, 0), shape="oval",
+                                    size=(15, 10))  # <--- Зеленый овал
             projectile_group.add(projectile)
             self.last_attack_time = now
 

@@ -1,4 +1,5 @@
 import pygame
+import pygame.locals  # Добавьте эту строку, если её нет
 import random
 
 from entities.player import Player
@@ -7,31 +8,33 @@ from entities.projectile import Projectile
 from ui.button import Button
 
 class GameState:
-    """Базовый класс для всех игровых состояний."""
+    """Базовый  класс  для  всех  игровых  состояний."""
+
 
     def __init__(self, game):
+        super().__init__()  # <---  Убираем game отсюда
         self.game = game
 
     def handle_events(self, event):
-        """Обрабатывает события."""
+        """Обрабатывает  события."""
         pass
 
     def update(self):
-        """Обновляет логику."""
+        """Обновляет  логику."""
         pass
 
     def draw(self):
-        """Отрисовывает графику."""
+        """Отрисовывает  графику."""
         pass
 
 
 class MenuState(GameState):
-    """Состояние главного меню."""
+    """Состояние  главного  меню."""
 
     def __init__(self, game):
         super().__init__(game)
         self.start_button = Button(
-            "Начать игру",
+            "Начать  игру",
             self.game.screen_width // 2 - 100,
             self.game.screen_height // 2 - 50,
             200,
@@ -42,40 +45,42 @@ class MenuState(GameState):
 
     def handle_events(self, event):
         if self.start_button.is_clicked(event):
-            self.game.state = GameState(self.game)  # Переключаемся в состояние игры
+            self.game.state = PlayState(self.game)  # Переключаемся в  состояние  игры
 
     def update(self):
-        pass  # Пока не требуется обновлять логику меню
+        pass  # Пока  не  требуется  обновлять  логику  меню
 
     def draw(self):
         self.game.screen.blit(self.game.bg_image, (0, 0))
         self.start_button.draw(self.game.screen)
 
-class GameState(GameState):
+import pygame
+import pygame.locals
+
+from entities.enemy import Enemy
+
+class PlayState(GameState):
     """Состояние игры."""
 
     def __init__(self, game):
         super().__init__(game)
+
         self.game = game
-        game.player = Player((50, 50))
+        self.game.auto_fire = True
+        self.game.last_action_time = 0
+        game.player = Player((50, 50), game)
         game.player_group = pygame.sprite.GroupSingle(game.player)
-        game.player.equipment = [] # Инициализация списка экипировки игрока
+        game.player.equipment = []
 
     def handle_events(self, event):
         if self.game.show_game_over and self.game.ok_button.is_clicked(event):
             self.game.show_game_over = False
 
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Нажатие левой кнопки мыши
-            mouse_pos = pygame.mouse.get_pos()
-            for i, slot_pos in enumerate(self.game.equipment_slots):
-                slot_rect = pygame.Rect(slot_pos[0], slot_pos[1], 50, 50)
-                if slot_rect.collidepoint(mouse_pos):
-                    self.game.player.remove_equipment(i)  # Снять экипировку
-                    break
-
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 self.game.player.attack(self.game.projectile_group)
+                self.game.last_action_time = pygame.time.get_ticks()
+                self.game.auto_fire = False
 
     def update(self):
         self.game.player_group.update(self.game.projectile_group, self.game.enemy_group)
@@ -90,9 +95,9 @@ class GameState(GameState):
 
         now = pygame.time.get_ticks()
         if (
-                now - self.game.last_enemy_spawn_time
-                > self.game.enemy_spawn_cooldown
-                and self.game.enemies_spawned < self.game.enemies_per_wave
+            now - self.game.last_enemy_spawn_time
+            > self.game.enemy_spawn_cooldown
+            and self.game.enemies_spawned < self.game.enemies_per_wave
         ):
             enemy_y = self.game.player.rect.centery - 40
             spawn_x = self.game.screen_width + random.randint(-50, 50)
@@ -103,56 +108,66 @@ class GameState(GameState):
             self.game.last_enemy_spawn_time = now
             self.game.enemy_spawn_cooldown = random.randint(500, 1500)
 
-        # Проверка на повышение уровня
-        if self.game.player.experience >= self.game.player.level * 100:  # Условие повышения уровня
+        if self.game.player.experience >= self.game.player.level * 100:
             self.game.player.level += 1
             self.game.player.experience = 0
-            # ... (здесь можно добавить улучшения характеристик игрока)
+
+        # --- Проверка простоя и автоматическая стрельба ---
+        time_since_last_action = pygame.time.get_ticks() - self.game.last_action_time
+
+        # Автоматическая стрельба, если враги в поле зрения
+        in_vision = any(
+            enemy.rect.right < self.game.player.rect.right + self.game.player.vision_range
+            for enemy in self.game.enemy_group
+        )
+
+        if self.game.auto_fire and in_vision:
+            self.game.player.attack(self.game.projectile_group)
+
+        # Переключение в автоматический режим после простоя
+        elif not self.game.auto_fire and time_since_last_action > 5000:
+            self.game.auto_fire = True
 
     def draw(self):
-        self.game.screen.blit(self.game.bg_image, (0, 0))  #  <---  Рисуем  фон  в  начале
+        self.game.screen.blit(self.game.bg_image, (0, 0))
         self.game.player_group.draw(self.game.screen)
         self.game.enemy_group.draw(self.game.screen)
         self.game.projectile_group.draw(self.game.screen)
         self.game.enemy_projectile_group.draw(self.game.screen)
 
-        # Индикаторы здоровья
         health_label = self.game.font.render("Здоровье:", True, (255, 255, 255))
         self.game.screen.blit(health_label, (10, 10))
         self.game.draw_health_bar(self.game.player.health, 100, 10, width=150, height=15)
 
         for enemy in self.game.enemy_group:
             enemy_health_x = enemy.rect.centerx - 10
-            self.game.draw_health_bar(enemy.health, enemy_health_x, enemy.rect.y - 15, width=30, height=5, show_text=False,
-                                 max_health=enemy.max_health)
+            self.game.draw_health_bar(enemy.health, enemy_health_x, enemy.rect.y - 15, width=30, height=5,
+                                      show_text=False, max_health=enemy.max_health)
 
-        # Отображение уровня
         level_text = self.game.font.render(f"Уровень: {self.game.level}", True, (255, 255, 255))
         self.game.screen.blit(level_text, (10, 30))
 
-        # Отображение уровня и опыта игрока
-        player_level_text = self.game.font.render(f"Уровень игрока: {self.game.player.level}", True, (255, 255, 255))
+        player_level_text = self.game.font.render(f"Уровень  игрока: {self.game.player.level}", True,
+                                                  (255, 255, 255))
         self.game.screen.blit(player_level_text, (10, 50))
         exp_text = self.game.font.render(f"Опыт: {self.game.player.experience}", True, (255, 255, 255))
         self.game.screen.blit(exp_text, (10, 70))
 
-        self.game.chest_group.draw(self.game.screen) # <--- Добавляем отрисовку сундуков
+        self.game.chest_group.draw(self.game.screen)
 
-        # Отображение слотов экипировки:
-        for i, slot_pos in enumerate(self.game.equipment_slots):
-            pygame.draw.rect(self.game.screen, (100, 100, 100), (slot_pos[0], slot_pos[1], 50, 50))  # Серый фон слота
+        for equipment_type, slot_pos in self.game.equipment_slots.items():
+            pygame.draw.rect(self.game.screen, (100, 100, 100), (slot_pos[0], slot_pos[1], 50, 50))
 
-            # Отрисовка картинки экипировки
-            if i < len(self.game.player.equipment):
-                equipment_type = self.game.player.equipment[i].equipment_type
-                if equipment_type in self.game.equipment_images:
+            for equipment in self.game.player.equipment:
+                if equipment.equipment_type == equipment_type:
                     image = self.game.equipment_images[equipment_type]
-                    image = pygame.transform.scale(image, (50, 50))  # <--- Масштабируем изображение
-                    self.game.screen.blit(image, (slot_pos[0], slot_pos[1]))  # <--- Рисуем  в  координатах  слота
+                    image = pygame.transform.scale(image, (50, 50))
+                    self.game.screen.blit(image, (slot_pos[0], slot_pos[1]))
+                    break
 
         if self.game.show_game_over:
             game_over_font = pygame.font.Font(None, 50)
-            game_over_text = game_over_font.render("Вы погибли!", True, (255, 0, 0))
+            game_over_text = game_over_font.render("Вы  погибли!", True, (255, 0, 0))
             text_rect = game_over_text.get_rect(
                 center=(self.game.screen_width // 2, self.game.screen_height // 2)
             )

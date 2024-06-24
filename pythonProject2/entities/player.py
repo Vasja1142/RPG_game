@@ -3,8 +3,9 @@ from entities.projectile import Projectile
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos):
+    def __init__(self, pos, game):
         super().__init__()
+        self.game = game
         self.max_health = 100  # ДОБАВЛЕНО
         self.health = self.max_health
         self.vision_range = 800  # Добавляем дальность видимости игрока
@@ -61,12 +62,19 @@ class Player(pygame.sprite.Sprite):
                 self.armor -= equipment_to_remove.bonus  # Бонус к защите
 
     def attack(self, projectile_group):
-        """Создает снаряд и добавляет его в группу"""
+        """Создает снаряд и добавляет его в группу."""
         now = pygame.time.get_ticks()
-        if now - self.last_attack_time >= self.attack_cooldown:
+
+        # Проверка на ручной режим
+        if not self.game.auto_fire:
             projectile = Projectile(self.rect.center, direction=(1, 0))
             projectile_group.add(projectile)
-            self.last_attack_time = now
+        else:
+            # Автоматический режим - используем cooldown
+            if now - self.last_attack_time >= self.attack_cooldown:
+                projectile = Projectile(self.rect.center, direction=(1, 0))
+                projectile_group.add(projectile)
+                self.last_attack_time = now
 
     def update(self, projectile_group, enemies):
         """Обновляет состояние игрока."""
@@ -76,5 +84,5 @@ class Player(pygame.sprite.Sprite):
             for enemy in enemies
         )
 
-        if in_vision:
-            self.attack(projectile_group)
+        # if in_vision:
+            # self.attack(projectile_group)

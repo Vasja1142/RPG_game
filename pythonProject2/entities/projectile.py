@@ -1,10 +1,19 @@
 import pygame
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, pos, direction, speed=8):
+    def __init__(self, pos, direction, speed=8, color=(255, 0, 0), shape="rect", size=(10, 5)):
         super().__init__()
-        self.image = pygame.Surface((10, 5))
-        self.image.fill((255, 0, 0))
+        self.color = color
+        self.shape = shape
+        self.size = size
+
+        if self.shape == "rect":
+            self.image = pygame.Surface(self.size)
+            self.image.fill(self.color)
+        elif self.shape == "oval":  # <---  Добавляем поддержку овалов
+            self.image = pygame.Surface(self.size, pygame.SRCALPHA)  #  <--- Для прозрачности
+            pygame.draw.ellipse(self.image, self.color, (0, 0, *self.size))
+
         self.rect = self.image.get_rect(center=pos)
         self.speed = speed
         self.direction = direction

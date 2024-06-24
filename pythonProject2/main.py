@@ -1,4 +1,5 @@
 import pygame
+import pygame.locals  # Добавьте эту строку, если её нет
 import random
 
 from entities.player import Player
@@ -19,7 +20,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.bg_image = pygame.image.load("assets/images/background.png").convert()
 
-        self.player = Player((50, 50))
+        self.auto_fire = True  # По умолчанию автоматическая стрельба включена
+
+        self.player = Player((50, 50), self)
         self.player_group = pygame.sprite.GroupSingle(self.player)
 
         self.enemy_group = pygame.sprite.Group()
@@ -49,6 +52,7 @@ class Game:
             (255, 0, 0),
         )
 
+
         # Список с описанием доступной экипировки
         self.equipment_list = [
             Equipment("Меч", "weapon", 5),  # +5 к урону
@@ -61,16 +65,16 @@ class Game:
             # ... (добавить больше предметов)
         ]
 
-        self.equipment_slots = [
-            (10, self.screen_height - 50),  # Оружие
-            (80, self.screen_height - 50),  # Шлем
-            (150, self.screen_height - 50),  # Обувь
-            (220, self.screen_height - 50),  # Амулет
-            (290, self.screen_height - 50),  # Кольцо
-            (360, self.screen_height - 50),  # Накидка
-            (430, self.screen_height - 50),  # Доспехи
-            # ... (добавить больше слотов)
-        ]
+        # Слоты для экипировки (3x2)
+        self.equipment_slots = {
+            "helmet": (100, self.screen_height - 300),  # Шлем  -  выше
+            "armor": (100, self.screen_height - 200),  # Доспехи
+            "shoes": (100, self.screen_height - 100),  # Сапоги
+            "cloak": (200, self.screen_height - 300),  # Плащ  -  дальше  по  горизонтали
+            "amulet": (200, self.screen_height - 200),  # Амулет
+            "ring": (200, self.screen_height - 100),  # Кольцо
+            "weapon": (300, self.screen_height - 200)
+        }
 
         # Картинки для экипировки
         self.equipment_images = {
@@ -90,6 +94,7 @@ class Game:
         self.notification_text = None
         self.notification_rect = None
         self.notification_duration = 2000 # Время отображения уведомления
+        self.last_action_time = pygame.time.get_ticks()
 
     def draw_health_bar(self, health, x, y, width=50, height=10, show_text=True, max_health=100):
         """Рисует полоску здоровья."""
@@ -157,8 +162,6 @@ class Game:
 
         self.show_game_over = True
 
-
-
     def run(self):
         """Запуск игрового цикла"""
         running = True
@@ -169,18 +172,24 @@ class Game:
 
                 self.state.handle_events(event)
 
+            # Обновляем время последнего действия только для клавиш движения
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]:
+                self.last_action_time = pygame.time.get_ticks()
+
             self.state.update()
 
-            self.screen.blit(self.bg_image, (0, 0))   # <--  Очистка фона
+            self.screen.blit(self.bg_image, (0, 0))  # <--  Очистка  фона
             self.player_group.draw(self.screen)
             self.enemy_group.draw(self.screen)
             self.projectile_group.draw(self.screen)
             self.enemy_projectile_group.draw(self.screen)
 
             self.chest_group.update()
-            self.chest_group.draw(self.screen)      # <--  Рисуем сундуки
+            self.chest_group.draw(self.screen)  # <--  Рисуем  сундуки
 
-            self.state.draw()           # <-- Затем отрисовываем
+            self.state.draw()  # <--  Затем  отрисовываем  элементы  состояния  игры
+
 
             # Отображаем уведомление, если оно есть
             if self.show_notification:
