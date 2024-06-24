@@ -39,6 +39,11 @@ class Player(pygame.sprite.Sprite):
         # Применяем бонус к характеристикам
         equipment.apply_bonus(self)
 
+    def sell_equipment(self, equipment):
+        """Продаёт предмет экипировки."""
+        self.gold += equipment.level * 5  # Цена продажи зависит от уровня предмета
+        self.remove_equipment(equipment)  # Удаляем предмет из инвентаря
+
     def remove_equipment(self, slot_index):
         """Удаляет предмет экипировки из списка по индексу."""
         if 0 <= slot_index < len(self.equipment):

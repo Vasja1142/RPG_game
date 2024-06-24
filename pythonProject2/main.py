@@ -8,6 +8,7 @@ from entities.projectile import Projectile
 from ui.button import Button
 from entities.game_states import MenuState, GameState
 from entities.chest import Chest
+from entities.chest import ChestManager
 from entities.equipment import Equipment
 
 class Game:
@@ -29,6 +30,7 @@ class Game:
         self.projectile_group = pygame.sprite.Group()
         self.enemy_projectile_group = pygame.sprite.Group()
         self.chest_group = pygame.sprite.Group()
+        self.chest_manager = ChestManager()
 
         self.font = pygame.font.Font(None, 20)
         self.MAX_HEALTH = 100
@@ -122,8 +124,10 @@ class Game:
         self.chest_group.add(new_chest)
 
     def get_random_equipment(self):
-        """Выбирает случайный предмет экипировки из списка."""
-        return random.choice(self.equipment_list)
+        """Выбирает случайный предмет экипировки из списка и устанавливает уровень."""
+        equipment = random.choice(self.equipment_list)
+        equipment.level = max(1, self.player.level)
+        return equipment
 
     def handle_collisions(self):
         """Обрабатывает столкновения."""

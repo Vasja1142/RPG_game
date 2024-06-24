@@ -37,3 +37,20 @@ class Chest(pygame.sprite.Sprite):
     def draw(self, screen):
         """Отрисовывает сундук."""
         screen.blit(self.image, self.rect)
+
+class ChestManager:
+    def __init__(self):
+        self.chest_level = 1  # Начальный уровень сундука
+
+    def upgrade_chest(self, cost):
+        """Повышает уровень сундука, если хватает денег."""
+        if player.gold >= cost:  # Предполагаем, что у игрока есть атрибут gold
+            player.gold -= cost
+            self.chest_level += 1
+
+    def create_chest(self, game):
+        """Создает сундук с предметом, уровень которого зависит от уровня сундука."""
+        new_equipment = game.get_random_equipment()
+        new_equipment.level = self.chest_level  # Уровень предмета = уровень сундука
+        new_chest = Chest(game.screen_width // 2 - 25, game.screen_height // 2 - 25, new_equipment, game)
+        game.chest_group.add(new_chest)
