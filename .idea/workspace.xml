@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c3551797-2394-4909-83b3-969b578cd466" name="Changes" comment="save">
+      <change afterPath="$PROJECT_DIR$/pythonProject2/ui/inventory_UI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pythonProject2/entities/chest.py" beforeDir="false" afterPath="$PROJECT_DIR$/pythonProject2/entities/chest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pythonProject2/entities/game_states.py" beforeDir="false" afterPath="$PROJECT_DIR$/pythonProject2/entities/game_states.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pythonProject2/entities/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/pythonProject2/entities/player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pythonProject2/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/pythonProject2/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pythonProject2/ui/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/pythonProject2/ui/chestOpenUI.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Vasja1142&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Vasja1142/RPG_game.git&quot;,
+    &quot;accountId&quot;: &quot;d8f28daa-9112-4df8-8268-ae40e8ce51f0&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2iIqSJm1VSugTIW3WzNi812l2ks" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.chest.executor&quot;: &quot;Run&quot;,
+    &quot;Python.enemy.executor&quot;: &quot;Run&quot;,
+    &quot;Python.equipment.executor&quot;: &quot;Run&quot;,
+    &quot;Python.game_states.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.notification.executor&quot;: &quot;Run&quot;,
+    &quot;Python.player.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/vasja/Рабочий стол/repositories/RPG_game&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pythonProject2/assets/images" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="RPG_game" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pythonProject2" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pythonProject2/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-5b207ade9991-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.17890.14" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c3551797-2394-4909-83b3-969b578cd466" name="Changes" comment="" />
+      <created>1719188440147</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1719188440147</updated>
+    </task>
+    <task id="LOCAL-00001" summary="save">
+      <option name="closed" value="true" />
+      <created>1719246439679</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1719246439680</updated>
+    </task>
+    <task id="LOCAL-00002" summary="save">
+      <option name="closed" value="true" />
+      <created>1719257591833</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1719257591834</updated>
+    </task>
+    <task id="LOCAL-00003" summary="save">
+      <option name="closed" value="true" />
+      <created>1719258397790</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1719258397790</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="save" />
+    <option name="LAST_COMMIT_MESSAGE" value="save" />
+  </component>
+</project>
