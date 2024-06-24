@@ -7,6 +7,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.game = game
         self.max_health = 100  # ДОБАВЛЕНО
+        self.gold = 0  # Начальное количество золота
         self.health = self.max_health
         self.vision_range = 800  # Добавляем дальность видимости игрока
 
@@ -44,11 +45,20 @@ class Player(pygame.sprite.Sprite):
         self.gold += equipment.level * 5  # Цена продажи зависит от уровня предмета
         self.remove_equipment(equipment)  # Удаляем предмет из инвентаря
 
+    def get_equipment(self, equipment_type):
+        """Возвращает предмет экипировки указанного типа, если он есть в инвентаре."""
+        for equipment in self.equipment:
+            if equipment.equipment_type == equipment_type:
+                return equipment
+        return None
+
     def remove_equipment(self, slot_index):
         """Удаляет предмет экипировки из списка по индексу."""
-        if 0 <= slot_index < len(self.equipment):
-            equipment_to_remove = self.equipment[slot_index]
-            self.equipment.pop(slot_index)
+
+        def remove_equipment(self, equipment):
+            """Удаляет предмет экипировки из списка."""
+            if equipment in self.equipment:
+                self.equipment.remove(equipment)
 
             # Снимаем бонус экипировки
             if equipment_to_remove.equipment_type == "weapon":

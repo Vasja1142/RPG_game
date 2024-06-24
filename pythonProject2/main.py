@@ -6,6 +6,7 @@ from entities.player import Player
 from entities.enemy import Enemy
 from entities.projectile import Projectile
 from ui.button import Button
+from ui.inventory_UI import InventoryUI
 from entities.game_states import MenuState, GameState
 from entities.chest import Chest
 from entities.chest import ChestManager
@@ -20,6 +21,7 @@ class Game:
         pygame.display.set_caption("Legend of Mushroom")
         self.clock = pygame.time.Clock()
         self.bg_image = pygame.image.load("assets/images/background.png").convert()
+        self.inventory_ui = InventoryUI(self)  # Создаем объект InventoryUI
 
         self.auto_fire = True  # По умолчанию автоматическая стрельба включена
 
@@ -120,7 +122,7 @@ class Game:
 
         # Даем сундук с экипировкой при переходе на новый уровень
         new_equipment = self.get_random_equipment()
-        new_chest = Chest(self.screen_width // 2 - 25, self.screen_height // 2 - 25, new_equipment, self)
+        new_chest = Chest(self.screen_width // 2 - 25, self.screen_height // 2 - 25 , new_equipment, self)
         self.chest_group.add(new_chest)
 
     def get_random_equipment(self):

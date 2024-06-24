@@ -6,6 +6,7 @@ from entities.player import Player
 from entities.enemy import Enemy
 from entities.projectile import Projectile
 from ui.button import Button
+from ui.chestOpenUI import ChestOpenUI
 
 class GameState:
     """Базовый  класс  для  всех  игровых  состояний."""
@@ -68,7 +69,7 @@ class PlayState(GameState):
         self.game = game
         self.game.auto_fire = True
         self.game.last_action_time = 0
-        game.player = Player((50, 50), game)
+        game.player = Player((50, 100), game)
         game.player_group = pygame.sprite.GroupSingle(game.player)
         game.player.equipment = []
 
@@ -81,6 +82,26 @@ class PlayState(GameState):
                 self.game.player.attack(self.game.projectile_group)
                 self.game.last_action_time = pygame.time.get_ticks()
                 self.game.auto_fire = False
+
+        # Открываем/закрываем инвентарь по нажатию клавиши "I"
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_i:
+                print("Нажата клавиша I в PlayState")  # Отладочная печать
+                self.game.inventory_ui.toggle_visibility()
+
+        self.game.inventory_ui.handle_events(event)  # <--  Добавляем эту строку
+
+        chest = None  # <--  Определяем chest до цикла
+        for chest in self.game.chest_group:
+            if chest.rect.collidepoint(pygame.mouse.get_pos()):
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    chest.open_chest()
+                    break
+
+                    #  Теперь  chest  будет  доступен  вне  цикла  for,
+        #  даже  если  цикл  не  выполнялся  (т.е.  не  было  найдено  сундуков)
+        if hasattr(chest, 'chest_open_ui'):
+            chest.chest_open_ui.handle_events(event)
 
     def update(self):
         self.game.player_group.update(self.game.projectile_group, self.game.enemy_group)
@@ -100,6 +121,7 @@ class PlayState(GameState):
             and self.game.enemies_spawned < self.game.enemies_per_wave
         ):
             enemy_y = self.game.player.rect.centery - 40
+
             spawn_x = self.game.screen_width + random.randint(-50, 50)
             new_enemy = Enemy((spawn_x, enemy_y), self.game.level)
             self.game.enemy_group.add(new_enemy)
@@ -153,6 +175,9 @@ class PlayState(GameState):
         exp_text = self.game.font.render(f"Опыт: {self.game.player.experience}", True, (255, 255, 255))
         self.game.screen.blit(exp_text, (10, 70))
 
+        gold_text = self.game.font.render(f"Золото: {self.game.player.gold}", True, (255, 255, 255))  # Новая строка
+        self.game.screen.blit(gold_text, (10, 90))  # Новая строка
+
         self.game.chest_group.draw(self.game.screen)
 
         for equipment_type, slot_pos in self.game.equipment_slots.items():
@@ -174,3 +199,10 @@ class PlayState(GameState):
             self.game.screen.blit(game_over_text, text_rect)
 
             self.game.ok_button.draw(self.game.screen)
+
+        self.game.inventory_ui.draw()  # <--  Добавьте эту строку, если её нет
+
+        for chest in self.game.chest_group:
+            if hasattr(chest, 'chest_open_ui'):
+                chest.chest_open_ui.draw()
+
