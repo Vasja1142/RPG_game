@@ -69,6 +69,7 @@ class PlayState(GameState):
         self.game = game
         self.game.auto_fire = True
         self.game.last_action_time = 0
+        self.open_chest = None  # Добавляем атрибут для хранения ссылки на открытый сундук
         game.player = Player((50, 100), game)
         game.player_group = pygame.sprite.GroupSingle(game.player)
         game.player.equipment = []
@@ -91,17 +92,19 @@ class PlayState(GameState):
 
         self.game.inventory_ui.handle_events(event)  # <--  Добавляем эту строку
 
-        chest = None  # <--  Определяем chest до цикла
+        chest = None
         for chest in self.game.chest_group:
             if chest.rect.collidepoint(pygame.mouse.get_pos()):
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     chest.open_chest()
+                    self.open_chest = chest  # Сохраняем ссылку на открытый сундук
                     break
 
-                    #  Теперь  chest  будет  доступен  вне  цикла  for,
-        #  даже  если  цикл  не  выполнялся  (т.е.  не  было  найдено  сундуков)
-        if hasattr(chest, 'chest_open_ui'):
-            chest.chest_open_ui.handle_events(event)
+                    #  Используем self.open_chest для обработки событий окна с экипировкой
+        if self.open_chest and hasattr(self.open_chest, 'chest_open_ui'):  # <--  Используем self.open_chest
+            self.open_chest.chest_open_ui.handle_events(event)
+
+
 
     def update(self):
         self.game.player_group.update(self.game.projectile_group, self.game.enemy_group)
