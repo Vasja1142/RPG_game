@@ -87,21 +87,24 @@ class PlayState(GameState):
         # Открываем/закрываем инвентарь по нажатию клавиши "I"
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_i:
-                print("Нажата клавиша I в PlayState")
+                print("Нажата клавиша I в PlayState")  # Отладочная печать
                 self.game.inventory_ui.toggle_visibility()
 
-        self.game.inventory_ui.handle_events(event)
+        self.game.inventory_ui.handle_events(event)  # <--  Добавляем эту строку
 
         chest = None
         for chest in self.game.chest_group:
             if chest.rect.collidepoint(pygame.mouse.get_pos()):
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     chest.open_chest()
-                    self.open_chest = chest
+                    self.open_chest = chest  # Сохраняем ссылку на открытый сундук
                     break
 
-        if self.open_chest and hasattr(self.open_chest, 'chest_open_ui'):
+                    #  Используем self.open_chest для обработки событий окна с экипировкой
+        if self.open_chest and hasattr(self.open_chest, 'chest_open_ui'):  # <--  Используем self.open_chest
             self.open_chest.chest_open_ui.handle_events(event)
+
+
 
     def update(self):
         self.game.player_group.update(self.game.projectile_group, self.game.enemy_group)
@@ -176,7 +179,7 @@ class PlayState(GameState):
 
         # Уровень игрока
         player_level_text = self.game.font.render(f"Уровень: {self.game.player.level}", True,
-                                               (255, 255, 255))  # Меняем надпись
+                                                  (255, 255, 255))  # Меняем надпись
         self.game.screen.blit(player_level_text, (10, 30))
 
         gold_text = self.game.font.render(f"Золото: {self.game.player.gold}", True, (255, 255, 255))  # Новая строка

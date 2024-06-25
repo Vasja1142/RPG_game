@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="c3551797-2394-4909-83b3-969b578cd466" name="Changes" comment="save" />
+=======
+    <list default="true" id="c3551797-2394-4909-83b3-969b578cd466" name="Changes" comment="save">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pythonProject2/entities/game_states.py" beforeDir="false" afterPath="$PROJECT_DIR$/pythonProject2/entities/game_states.py" afterDir="false" />
+    </list>
+>>>>>>> parent of 607fb96 (save)
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -147,15 +154,7 @@
       <option name="project" value="LOCAL" />
       <updated>1719263623796</updated>
     </task>
-    <task id="LOCAL-00007" summary="save">
-      <option name="closed" value="true" />
-      <created>1719264675965</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1719264675965</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

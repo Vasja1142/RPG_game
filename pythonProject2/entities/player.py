@@ -35,8 +35,10 @@ class Player(pygame.sprite.Sprite):
             if existing_equipment.equipment_type == equipment.equipment_type:
                 return  # Не добавляем, если уже есть экипировка такого типа
 
-        self.equipment.append(equipment)
-        self.apply_equipment_skills(equipment)
+        self.equipment.append(equipment)  # <--- Добавляем экипировку в инвентарь игрока
+
+        # Применяем бонус к характеристикам
+        equipment.apply_bonus(self)
 
     def sell_equipment(self, equipment):
         """Продаёт предмет экипировки."""
@@ -50,28 +52,29 @@ class Player(pygame.sprite.Sprite):
                 return equipment
         return None
 
-    def remove_equipment(self, equipment):
+    def remove_equipment(self, slot_index):
         """Удаляет предмет экипировки из списка по индексу."""
-        if equipment in self.equipment:
-            self.equipment.remove(equipment)
+
+        def remove_equipment(self, equipment):
+            """Удаляет предмет экипировки из списка."""
+            if equipment in self.equipment:
+                self.equipment.remove(equipment)
 
             # Снимаем бонус экипировки
-            if equipment.equipment_type == "weapon":
-                self.damage -= equipment.bonus
-            elif equipment.equipment_type == "helmet":
-                self.health -= equipment.bonus
-            elif equipment.equipment_type == "shoes":
-                self.speed -= equipment.bonus
-            elif equipment.equipment_type == "amulet":
-                self.max_health -= equipment.bonus
-            elif equipment.equipment_type == "ring":
-                self.damage -= equipment.bonus
-            elif equipment.equipment_type == "cloak":
-                self.armor -= equipment.bonus
-            elif equipment.equipment_type == "armor":
-                self.armor -= equipment.bonus
-
-            self.remove_equipment_skills(equipment)  #  <--  Добавляем метод для удаления навыков
+            if equipment_to_remove.equipment_type == "weapon":
+                self.damage -= equipment_to_remove.bonus
+            elif equipment_to_remove.equipment_type == "helmet":
+                self.health -= equipment_to_remove.bonus
+            elif equipment_to_remove.equipment_type == "shoes":
+                self.speed -= equipment_to_remove.bonus
+            elif equipment_to_remove.equipment_type == "amulet":
+                self.max_health -= equipment_to_remove.bonus
+            elif equipment_to_remove.equipment_type == "ring":
+                self.damage -= equipment_to_remove.bonus
+            elif equipment_to_remove.equipment_type == "cloak":
+                self.armor -= equipment_to_remove.bonus
+            elif equipment_to_remove.equipment_type == "armor":
+                self.armor -= equipment_to_remove.bonus  # Бонус к защите
 
     def attack(self, projectile_group):
         """Создает снаряд и добавляет его в группу."""
@@ -88,29 +91,6 @@ class Player(pygame.sprite.Sprite):
                 projectile_group.add(projectile)
                 self.last_attack_time = now
 
-    def apply_equipment_skills(self, equipment):
-        """Применяет навыки экипировки к игроку."""
-        for skill in equipment.skills:
-            if skill["name"] == "Вампиризм":
-                self.vampirism = skill["value"]
-            elif skill["name"] == "Ярость":
-                self.fury = skill["value"]
-            elif skill["name"] == "Регенерация":
-                self.regeneration = skill["value"]
-            elif skill["name"] == "Удача":
-                self.luck = skill["value"]
-
-    def remove_equipment_skills(self, equipment):
-        """Удаляет навыки экипировки с игрока."""
-        for skill in equipment.skills:
-            if skill["name"] == "Вампиризм":
-                self.vampirism = 0
-            elif skill["name"] == "Ярость":
-                self.fury = 0
-            elif skill["name"] == "Регенерация":
-                self.regeneration = 0
-            elif skill["name"] == "Удача":
-                self.luck = 0
     def update(self, projectile_group, enemies):
         """Обновляет состояние игрока."""
         # Проверка видимости врагов

@@ -71,12 +71,8 @@ class ChestOpenUI:
         text = f"{slot_number}. {equipment.name} (Уровень {equipment.level})"
         equipment_text = self.font.render(text, True, (255, 255, 255))
         self.game.screen.blit(equipment_text, (self.x + 10, self.y + y_offset))
-
-
-        y_offset += 30
-        for i, skill in enumerate(equipment.skills):
-            skill_text = self.font.render(f"{skill['name']}: +{skill['value']}", True, (255, 255, 255))
-            self.game.screen.blit(skill_text, (self.x + 10, self.y + y_offset + i * 20))
+        bonus_text = self.font.render(f"Бонус: +{equipment.bonus}", True, (255, 255, 255))
+        self.game.screen.blit(bonus_text, (self.x + 10, self.y + y_offset + 20))
 
     def handle_events(self, event):
         if self.visible:
