@@ -1,5 +1,5 @@
 import pygame
-import pygame.locals  # Добавьте эту строку, если её нет
+import pygame.locals
 import random
 
 from entities.player import Player
@@ -21,7 +21,7 @@ class Game:
         pygame.display.set_caption("Legend of Mushroom")
         self.clock = pygame.time.Clock()
         self.bg_image = pygame.image.load("assets/images/background.png").convert()
-        self.inventory_ui = InventoryUI(self)  # Создаем объект InventoryUI
+        self.inventory_ui = InventoryUI(self)
 
         self.auto_fire = True  # По умолчанию автоматическая стрельба включена
 
